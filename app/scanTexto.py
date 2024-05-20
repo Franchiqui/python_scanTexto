@@ -1,39 +1,34 @@
 from PIL import Image
 import pytesseract
-import cv2
 
-def scanTexto_func(image_path):
-    """
-    Extrae texto de una imagen y lo devuelve como cadena.
+pytesseract.pytesseract.tesseract_cmd = r'C:/Archivos de programa/Tesseract-OCR/tesseract.exe'
 
-    Argumentos:
-        imagePath (str): Ruta al archivo de imagen a escanear.
 
-    Retorno:
-        str: El texto extraído de la imagen.
-    """
+def scan_text_from_image(image_path):
+    try:
+        # Abre la imagen usando PIL
+        print(f"Abriendo la imagen desde {image_path}")
+        img = Image.open(image_path)
+        print("Imagen abierta correctamente")
+        
+        # Configura la ruta del ejecutable de Tesseract si es necesario
+        # pytesseract.pytesseract.tesseract_cmd = r'C:/Archivos de programa/Tesseract-OCR/tesseract.exe'
+        
+        # Extrae el texto de la imagen
+        print("Extrayendo texto de la imagen...")
+        text = pytesseract.image_to_string(img, lang='spa')
+        print("Texto extraído:")
+        print(text)
+        
+        return text
+    except Exception as e:
+        print(f"Ocurrió un error: {e}")
+        return ""
 
-    # Cargar la imagen usando OpenCV
-    img = cv2.imread(image_path)
+# Ruta de la imagen
+image_path = 'D:/python_ScanTexto/data/routing.PNG'
 
-    # Compruebe si la imagen se leyó correctamente.
-    if img is None:
-        raise Exception("Error loading image: {}".format(image_path))
-
-    # Convertir la imagen a escala de grises
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-
-    # Aplicar umbrales para convertir a una imagen binaria
-    threshold_img = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
-
-    # Convertir la imagen de OpenCV a un objeto PIL
-    pil_image = Image.fromarray(threshold_img)
-
-    # Establecer la ruta de Tesseract
-    pytesseract.pytesseract.tesseract_cmd = r'C:/Archivos de programa/Tesseract-OCR/tesseract.exe'
-
-    # Extraer texto usando pytesseract
-    text = pytesseract.image_to_string(pil_image, config='--psm 10 lang=es')
-
-    # Devolver el texto extraído
-    return text
+# Extrae el texto
+texto_extraido = scan_text_from_image(image_path)
+print("Texto extraído final:")
+print(texto_extraido)
