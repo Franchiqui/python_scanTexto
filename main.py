@@ -21,8 +21,8 @@ async def scanTexto_endpoint(request: Request, scanTexto_data: ScanTexto):
     image_path = scanTexto_data.image_path
 
     try:
-        escaner = scan_text_from_image(image_path)
-        return {"data": escaner}
+        texto_extraido = scan_text_from_image(image_path)
+        return {"data": texto_extraido}
     except Exception as e:
         print(f"Error extracting text: {e}")
         return {"error": str(e)}
