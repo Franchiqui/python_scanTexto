@@ -32,3 +32,4 @@ image_path = 'D:/python_ScanTexto/data/routing.PNG'
 texto_extraido = scan_text_from_image(image_path)
 print("Texto extraído final:")
 print(texto_extraido)
+
