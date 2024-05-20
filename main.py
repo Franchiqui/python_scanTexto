@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request
 from pydantic import BaseModel
 from app.traductor import traductor_func
-from app.scanTexto import scanTexto_func
+from app.scanTexto import scan_text_from_image
 
 app = FastAPI()
 
@@ -21,7 +21,7 @@ async def scanTexto_endpoint(request: Request, scanTexto_data: ScanTexto):
     image_path = scanTexto_data.image_path
 
     try:
-        escaner = scanTexto_func(image_path)
+        escaner = scan_text_from_image(image_path)
         return {"data": escaner}
     except Exception as e:
         print(f"Error extracting text: {e}")
