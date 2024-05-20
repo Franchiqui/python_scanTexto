@@ -1,7 +1,8 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, UploadFile
 from pydantic import BaseModel
 from app.traductor import traductor_func
 from app.scanTexto import scan_text_from_image
+from app.scanTexto2 import scan_text2_func
 
 app = FastAPI()
 
@@ -9,6 +10,8 @@ app = FastAPI()
 class ScanTexto(BaseModel):
     image_path: str
     
+class ScanTexto2(BaseModel):
+    image: UploadFile
 
 @app.get("/")
 def index():
@@ -20,6 +23,12 @@ def index():
 async def scanTexto_endpoint(request: Request, scanTexto_data: ScanTexto):
     image_path = scanTexto_data.image_path
     texto_extraido = scan_text_from_image(image_path)
+    return {"data": texto_extraido}
+
+@app.post("/scanTexto2")
+async def scanTexto2_endpoint(request: Request, scanTexto2_data: ScanTexto2):
+    UploadFile = scanTexto2_data.UploadFile
+    texto_extraido = scan_text2_func(UploadFile)
     return {"data": texto_extraido}
 
 
