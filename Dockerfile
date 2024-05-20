@@ -1,26 +1,26 @@
-# Usa la imagen base de tiangolo/uvicorn-gunicorn-fastapi para Python 3.12
-FROM python:3.12
+# Usa una imagen base con Python
+FROM python:3.12-slim
 
 # Instalar las dependencias del sistema necesarias
 RUN apt-get update && apt-get install -y \
     libgl1-mesa-glx \
     libglib2.0-0
-    
-# Establece el directorio de trabajo dentro del contenedor
+
+# Establecer el directorio de trabajo en el contenedor
 WORKDIR /app
 
 # Copiar el archivo de requerimientos
-COPY requirements.txt .
+COPY requirements.txt /app/
 
+# Instalar las dependencias de Python
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Instalar las dependencias
-RUN pip install -r requirements.txt
+# Copiar el resto del código de la aplicación
+COPY . /app/
 
-# Copiar todo el contenido del directorio actual al directorio de trabajo del contenedor
-COPY . .
+# Exponer el puerto que usará la aplicación
+EXPOSE 8000
 
-# Exponer el puerto 8000 en el contenedor
-EXPOSE 3500
+# Comando para ejecutar la aplicación
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
 
-# Comando para ejecutar la aplicación utilizando uvicorn
-CMD ["uvicorn", "main:app", "--reload", "--host", "0.0.0.0", "--port", "3500"]

@@ -1,19 +1,39 @@
-import pytesseract as tess
+from PIL import Image
+import pytesseract
 import cv2
-tess.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
-# my_image = Image.open('D:\\PROGRAMMING\\3-Python\\My_Virtual_Envs\\ocr_youtube\\routing.PNG')
-my_image = cv2.imread('D:\\python_ScanTexto\\data\\routing.PNG')
-txt = tess.image_to_string(my_image)
-print(txt)
+def scanTexto_func(imagePath):
+    """
+    Extrae texto de una imagen y lo devuelve como cadena.
 
-# Display original image
-cv2.imshow('Image', my_image)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+    Argumentos:
+        imagePath (str): Ruta al archivo de imagen a escanear.
 
-my_file = open('file1.txt', 'w')
-my_file.write(txt + '\n')
-my_file.close()
+    Retorno:
+        str: El texto extraído de la imagen.
+    """
 
-output = tess.image_path('text_result.txt')
+    # Cargar la imagen usando OpenCV
+    img = cv2.imread(imagePath)
+
+    # Compruebe si la imagen se leyó correctamente.
+    if img is None:
+        raise Exception("Error loading image: {}".format(imagePath))
+
+    # Convertir la imagen a escala de grises
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+    # Aplicar umbrales para convertir a una imagen binaria
+    threshold_img = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
+
+    # Convertir la imagen de OpenCV a un objeto PIL
+    pil_image = Image.fromarray(threshold_img)
+
+    # Establecer la ruta de Tesseract
+    pytesseract.pytesseract.tesseract_cmd = r'C:/Archivos de programa/Tesseract-OCR/tesseract.exe'
+
+    # Extraer texto usando pytesseract
+    text = pytesseract.image_to_string(pil_image, config='--psm 10 lang=es')
+
+    # Devolver el texto extraído
+    return text
