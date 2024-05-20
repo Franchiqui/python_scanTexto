@@ -2,7 +2,7 @@ from PIL import Image
 import pytesseract
 import cv2
 
-def scanTexto_func(imagePath):
+def scanTexto_func(image_path):
     """
     Extrae texto de una imagen y lo devuelve como cadena.
 
@@ -14,11 +14,11 @@ def scanTexto_func(imagePath):
     """
 
     # Cargar la imagen usando OpenCV
-    img = cv2.imread(imagePath)
+    img = cv2.imread(image_path)
 
     # Compruebe si la imagen se leyó correctamente.
     if img is None:
-        raise Exception("Error loading image: {}".format(imagePath))
+        raise Exception("Error loading image: {}".format(image_path))
 
     # Convertir la imagen a escala de grises
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
