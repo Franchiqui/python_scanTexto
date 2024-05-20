@@ -3,17 +3,11 @@ from pydantic import BaseModel
 import pytesseract
 from PIL import Image
 import os
-from app.traductor import traductor_func
-from app.scanTexto import scan_text_from_image
 
 app = FastAPI()
 
 class ScanTexto(BaseModel):
     image_path: str
-    
-@app.get("/")
-def index():
-    return {"message" : "Hola, Pythonianos"}
 
 def scan_text_from_image(image_path):
     try:
@@ -56,18 +50,6 @@ async def scanTexto_endpoint(scanTexto_data: ScanTexto):
     except Exception as e:
         print(f"Error extracting text: {e}")
         return {"error": str(e)}
-    
-class TraductorRequest(BaseModel):
-    translate_text: str
-    target_lang: str
-
-
-@app.post("/traductor")
-async def traductor_endpoint(request: Request, traductor_data: TraductorRequest):
-    translate_text = traductor_data.translate_text
-    target_lang = traductor_data.target_lang
-    traduccion = traductor_func(translate_text, target_lang)
-    return {"data": traduccion}
 
 if __name__ == "__main__":
     import uvicorn
