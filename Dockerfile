@@ -1,7 +1,11 @@
 # Usa la imagen base de tiangolo/uvicorn-gunicorn-fastapi para Python 3.12
 FROM python:3.12
 
-
+# Instalar las dependencias del sistema necesarias
+RUN apt-get update && apt-get install -y \
+    libgl1-mesa-glx \
+    libglib2.0-0
+    
 # Establece el directorio de trabajo dentro del contenedor
 WORKDIR /app
 
