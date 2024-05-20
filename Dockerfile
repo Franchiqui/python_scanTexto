@@ -1,5 +1,5 @@
 # Usa la imagen base de tiangolo/uvicorn-gunicorn-fastapi para Python 3.12
-FROM python:3.11-slim
+FROM python:3.12
 
 
 # Establece el directorio de trabajo dentro del contenedor
